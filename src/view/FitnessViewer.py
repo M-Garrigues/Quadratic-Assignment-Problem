@@ -5,16 +5,12 @@ import pandas as pd
 
 class FitnessViewer:
 
-    def __init__(self, length, values):
-        self._length = length
+    def __init__(self, values):
+        self._length = values.size
         self._values = pd.Series(values, index=pd.RangeIndex(stop=self._length))
 
     def plot(self):
-        #print(self._values)
-        ts = self._values
-        #ts = ts.cumsum()
-        ts.plot()
-
+        self._values.plot()
         plt.show()
 
     def add(self, value):
@@ -24,8 +20,6 @@ class FitnessViewer:
         self._length += 1
 
 
-viewer = FitnessViewer(10, np.random.randn(10))
+viewer = FitnessViewer(np.random.randn(10))
 viewer.plot()
 
-viewer.add(5)
-viewer.plot()
