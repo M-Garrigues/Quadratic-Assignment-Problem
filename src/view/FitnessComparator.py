@@ -10,7 +10,7 @@ class FitnessComparator:
         self._values = df
 
     def plot(self):
-        self._values.cumsum()
+        self._values = self._values.cumsum()
         plt.figure()
         self._values.plot()
         plt.legend(loc='best')
@@ -23,5 +23,5 @@ class FitnessComparator:
         self._length += 1
 
 
-fit = FitnessComparator(df=pd.DataFrame(np.random.randn(1000, 4), index=pd.RangeIndex(stop=1000), columns=list('ABCD')))
+fit = FitnessComparator(df=pd.DataFrame(np.random.randn(100, 4), index=pd.RangeIndex(stop=100), columns=list('ABCD')))
 fit.plot()
