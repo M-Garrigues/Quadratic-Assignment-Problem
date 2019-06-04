@@ -49,6 +49,9 @@ class Taixxa:
                     neighbours.append(temp)
         return neighbours
 
+    # TODO Ajouter fonction pour varier la manière dont la température décroit
+    # TODO Mettre tous les paramètres initaux en paramètres
+    # TODO Ajouter une mémoire du fitness à chaque itération
     def simulatedAnnealing(self, t0):
         xmin = self.permutation
         xnext = 0
