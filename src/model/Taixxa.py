@@ -52,17 +52,17 @@ class Taixxa:
     # TODO Ajouter fonction pour varier la manière dont la température décroit
     # TODO Mettre tous les paramètres initaux en paramètres
     # TODO Ajouter une mémoire du fitness à chaque itération
-    def simulatedAnnealing(self, t0, mu):
+    def simulatedAnnealing(self, t0, mu,n1 ,n2):
         fitness = []
         xmin = self.permutation
         xnext = 0
         temp = t0
         fmin = self.computeCost()
         fitness.append(fmin)
-        for k in range(100):
+        for k in range(n1):
             neighbours = self.getNeighbours()
             # print(neighbours)
-            for l in range(1, 100):
+            for l in range(1, n2):
                 y = rd.choice(neighbours)
                 variationF = self.computeCost(y) - self.computeCost()
                 if variationF <= 0:
