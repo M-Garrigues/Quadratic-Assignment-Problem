@@ -36,7 +36,7 @@ class Taixxa:
             for j in range(self.modulesNumber):
                 newCost += self.weights[i, j] * self.distances[perm[i], perm[j]]
         return newCost
-
+#TODO Neighbourhood of n distance ?
     def getNeighbours(self):
         neighbours = []
         for i in range(self.modulesNumber):
