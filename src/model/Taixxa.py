@@ -78,3 +78,32 @@ class Taixxa:
                 fitness.append(self.computeCost())
             temp = temp * mu
         return xmin, fitness
+    
+    
+    # TODO séparer les data et les résolutions + besoin d'un objet permutation pour simplifier le tabu search (actuellement ce n'est pas la vrai version de l'algo)
+    def tabuSearch(self,maxIter, lenList):
+        fitness = []
+        xmin = self.permutation
+        fmin = self.computeCost()
+        T = []
+        for i in range(maxIter):
+            C = [x for x in self.getNeighbours() if x not in T]
+            fC = list(map(lambda x: self.computeCost(x),C))
+            xnext = C[fC.index(min(fC))]
+            variationF = self.computeCost(xnext) - self.computeCost()
+            if variationF >= 0:
+                T.append(xnext)
+                if len(T) > lenList:
+                    T.pop(0)
+            fnext = self.computeCost(xnext)
+            if fnext < fmin:
+                xmin = xnext
+                fmin = fnext
+            self.permutation = xnext
+            fitness.append(self.computeCost())
+        return xmin ,fitness
+            
+                      
+            
+            
+            
