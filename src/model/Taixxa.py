@@ -17,14 +17,14 @@ class Taixxa:
             lines = f.readlines()
             self.modulesNumber = int(lines[0])
             temp = list(map(lambda x: list(filter(lambda a: a != '', x)),
-                            list(map(lambda x: x[:-1].split(" "), lines[2:self.modulesNumber + 2]))))
+                            list(map(lambda x: x[:-1].split(" "), lines[1:self.modulesNumber + 1]))))
             temp = list(map(lambda x: list(map(lambda a: int(a), x)), temp))
             self.weights = np.array(temp)
             temp = list(map(lambda x: list(filter(lambda a: a != '', x)),
-                            list(map(lambda x: x[:-1].split(" "), lines[self.modulesNumber + 3:len(lines)]))))
+                            list(map(lambda x: x[:-1].split(" "), lines[self.modulesNumber + 2:len(lines)]))))
             temp = list(map(lambda x: list(map(lambda a: int(a), x)), temp))
             self.distances = np.array(temp)
-
+            
         self.permutation = list(range(self.modulesNumber))
         print(self.permutation)
 
@@ -36,6 +36,7 @@ class Taixxa:
             for j in range(self.modulesNumber):
                 newCost += self.weights[i, j] * self.distances[perm[i], perm[j]]
         return newCost
+    
 #TODO Neighbourhood of n distance ?
     def getNeighbours(self):
         neighbours = []
