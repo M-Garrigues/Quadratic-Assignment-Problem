@@ -10,7 +10,7 @@ class FitnessComparator:
         self._values = df
 
     def plot(self):
-        self._values = self._values.cumsum()
+        self._values = self._values
         plt.figure()
         self._values.plot()
         plt.legend(loc='best')
