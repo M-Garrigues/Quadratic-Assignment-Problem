@@ -17,18 +17,20 @@ class Taixxa:
 
         with open(filename, "r") as f:
             lines = f.readlines()
+            
             self.modulesNumber = int(lines[0])
             temp = list(map(lambda x: list(filter(lambda a: a != '', x)),
                             list(map(lambda x: x[:-1].split(" "), lines[1:self.modulesNumber + 1]))))
             temp = list(map(lambda x: list(map(lambda a: int(a), x)), temp))
-            self.weights = np.array(temp)
+            self.weights = np.array(temp[:])
             temp = list(map(lambda x: list(filter(lambda a: a != '', x)),
-                            list(map(lambda x: x[:-1].split(" "), lines[self.modulesNumber + 2:len(lines)]))))
+                            list(map(lambda x: x[:-1].split(" "), lines[self.modulesNumber + 2:]))))
             temp = list(map(lambda x: list(map(lambda a: int(a), x)), temp))
             self.distances = np.array(temp)
 
         self.permutation = Permutation(modulesNumber=self.modulesNumber)
         print(self.permutation)
+
 
     def computeCost(self, perm=None):
         newCost = 0
