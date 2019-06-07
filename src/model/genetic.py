@@ -101,7 +101,7 @@ class GeneticAlgorithm:
 
             nbPerm = 1
             if self._crossMultiple:
-                nbPerm = int(self._crossProbability * len(self._population) + 1)
+                nbPerm = int(self._crossProbability * len(self._population[0]._perm) + 1)
 
             permA = self.pickGenes(main=couple[0], second=couple[1], nbPermutations=nbPerm)
             permB = self.pickGenes(main=couple[1], second=couple[0], nbPermutations=nbPerm)
@@ -117,20 +117,30 @@ class GeneticAlgorithm:
         childGenes = [None] * size
         permCrossed = list()
 
+        print(nbPermutations)
+        print(size)
         indexes = random.sample(range(0, size - 1), nbPermutations)
         for i in indexes:
             childGenes[i] = second[i]
             permCrossed.append((childGenes[i], main[i]))
 
         for i in range(size):
-
+            print(permCrossed)
+            print(childGenes[:])
             if childGenes[i] is None:
-                if not (main[i] in [e[0] for e in permCrossed]):
-                    childGenes[i] = main[i]
+                if main[i] in [e[0] for e in permCrossed]:
+                    print("OUI")
+                    for tup in permCrossed:
+                        if main[i] == tup[0]:
+                            childGenes[i] = tup[1]
                 else:
-                    childGenes[i] = permCrossed[0][1]
-                    permCrossed.pop(0)
+                    childGenes[i] = main[i]
 
+            print(childGenes[:])
+
+        print(main[:])
+        print(second[:])
+        print(childGenes[:])
         return Permutation(size, childGenes)
 
     def mutate(self):
@@ -145,6 +155,8 @@ class GeneticAlgorithm:
 data = Taixxa()
 data.loadFile("../../notebooks/tai12a.dat")
 algo = GeneticAlgorithm(data)
-algo.setParameters(population=50, selector=1, crossMultiple=True, crossProba=0.2, mutationProba=0.2)
-algo.iterate(2000)
-
+algo.setParameters(population=100, selector=1, crossMultiple=True, crossProba=0.2, mutationProba=0)
+#algo.iterate(2000)
+scores = algo.evaluatePopulation()
+couples = algo.selectBestCouples(scores)
+algo.crossover(couples)
