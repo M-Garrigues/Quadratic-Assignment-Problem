@@ -11,14 +11,12 @@ class GeneticAlgorithm:
         self._fitness = None
         self._best = None
 
-    def setParameters(self, population, selector, crossMultiple=False, crossProba=0.0, mutationProba= 0.01):
+    def setParameters(self, population, selector, crossMultiple=False, crossProba=0.0, mutationProba=0.01):
         self._population = [population]
         self._crossMultiple = crossMultiple
         self._crossProbability = crossProba
         self._mutationProbability = mutationProba
         self.initialise()
-
-
 
     def initialise(self):
 
@@ -28,17 +26,24 @@ class GeneticAlgorithm:
         self._best = 1000000000000000
         self._fitness = list()
 
-
     def evaluatePopulation(self):
-        scores  = [self._population.size]
-        i = 0
+
+        scores = list()
 
         for permutation in self._population:
-            scores[i] = permutation.computeCost()
+            scores.append(permutation.computeCost())
 
         return scores
 
     def selectBest(self, scores):
-        
 
+        selected = list()
 
+        for i in range(self._population.size / 2):
+            indexMin = scores.index(min(scores))
+
+            scores[indexMin] = 0
+
+            selected.append((self._population[indexMin], i))
+
+        return selected
