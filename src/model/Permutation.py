@@ -3,8 +3,11 @@ import copy
 
 class Permutation:
 
-    def __init__(self, modulesNumber):
-        self._perm = list(range(modulesNumber))
+    def __init__(self,modulesNumber = 0,perm=None):
+        if(perm != None):
+            self._perm = perm
+        else:
+            self._perm = list(range(modulesNumber))
         self._cost = 0
 
     def __getitem__(self, item):
@@ -45,3 +48,7 @@ class Permutation:
 
     def set(self, i, val):
         self._perm[i] = val
+        
+    def setAll(self, perm):
+        self._perm = perm
+        

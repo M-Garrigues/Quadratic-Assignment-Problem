@@ -81,7 +81,8 @@ class Taixxa:
             xnext = C[fC.index(min(fC))]
             variationF = xnext.computeCost(self) - self.permutation.computeCost(self)
             if variationF >= 0:
-                T.append(xnext.reversePerm(self.permutation))
+                if T.count(xnext.reversePerm(self.permutation)) == 0:
+                    T.append(xnext.reversePerm(self.permutation))
                 if len(T) > lenList:
                     T.pop(0)
             fnext = xnext.computeCost(self)
