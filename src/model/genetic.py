@@ -1,6 +1,9 @@
 import copy
+import random
+
 import math
 
+from src.model.Permutation import Permutation
 from src.model.Taixxa import Taixxa
 
 
@@ -49,6 +52,9 @@ class GeneticAlgorithm:
         for i in range(int(len(self._population) / 2.5)):
             indexMin = scores.index(min(scores))
 
+            if i is 0:
+                self._fitness.append(scores[indexMin])
+
             scores[indexMin] = math.inf
 
             selected.append((self._population[indexMin], i))
@@ -68,6 +74,47 @@ class GeneticAlgorithm:
 
         return ret
 
+    def crossover(self, couples):
+
+        newGeneration = list()
+
+        for couple in couples:
+
+            nbPerm = 1
+            if self._crossMultiple:
+                nbPerm = self._crossProbability * len(self._population) + 1
+
+            permA = self.pickGenes(main=couple[0], second=couple[1], nbPermutations=nbPerm)
+            permB = self.pickGenes(main=couple[1], second=couple[0], nbPermutations=nbPerm)
+
+            newGeneration.append(permA)
+            newGeneration.append(permB)
+
+        self._population = newGeneration
+
+    def pickGenes(self, main, second, nbPermutations):
+
+        size = len(main._perm)
+        childGenes = [None] * size
+        permCrossed = list()
+
+        indexes = random.sample(range(0, size - 1), nbPermutations)
+        for i in indexes:
+            childGenes[i] = second[i]
+            permCrossed.append((childGenes[i], main[i]))
+
+        for i in range(size):
+
+            if childGenes[i] is not None:
+                if not (main[i] in [e[1] for e in permCrossed]):
+                    childGenes[i] = main[i]
+                else:
+                    childGenes[i] = permCrossed[0][0]
+                    permCrossed.pop(0)
+
+        print(childGenes)
+        return Permutation(childGenes)
+
 
 data = Taixxa()
 data.loadFile("../../notebooks/tai12a.dat")
@@ -82,3 +129,7 @@ for b in best:
     print("----")
 
 print("--azfazfazfazffzafazazfzafzafzaf--")
+
+p = algo.crossover(best)
+
+print(p[:])
