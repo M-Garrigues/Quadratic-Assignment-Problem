@@ -3,9 +3,15 @@ import copy
 
 class Permutation:
 
-    def __init__(self, modulesNumber):
-        self._perm = list(range(modulesNumber))
+    
+    def __init__(self,modulesNumber,perm=None):
+        if(perm != None):
+            self._perm = perm
+        else:
+            self._perm = list(range(modulesNumber))
         self._cost = 0
+        
+        
 
     def __getitem__(self, item):
         return self._perm[item]
@@ -27,12 +33,22 @@ class Permutation:
                     temp.permute(i,j)
                     neighbours.append(temp)
         return neighbours
+    
+    def permhash(self):
+        prehash = tuple(self._perm)
+        return hash(prehash)
         
+    
     def computeCost(self, taixxa):
         newCost = 0
-        for i in range(len(self._perm)):
-            for j in range(i,len(self._perm)):
-                newCost += taixxa.weights[i, j] * taixxa.distances[self._perm[i], self._perm[j]]
+        hashed = self.permhash()
+        if  hashed in taixxa._hashMap:
+            return taixxa.getCost(hashed)
+        else:
+            for i in range(len(self._perm)):
+                for j in range(i,len(self._perm)):
+                    newCost += taixxa._weights[i, j] * taixxa._distances[self._perm[i], self._perm[j]]
+        taixxa.addHash(hashed,newCost)
         return newCost
     
     def reversePerm(self,permutation):
@@ -45,3 +61,7 @@ class Permutation:
 
     def set(self, i, val):
         self._perm[i] = val
+        
+    def setAll(self, perm):
+        self._perm = perm
+        
