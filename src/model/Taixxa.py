@@ -11,7 +11,6 @@ class Taixxa:
         self.weights = []
         self.distances = []
         self.permutation = Permutation(0)
-        self.cost = 0
         self.modulesNumber = 0
 
     def loadFile(self, filename):
@@ -30,47 +29,31 @@ class Taixxa:
             self.distances = np.array(temp[:-1])
 
         self.permutation = Permutation(modulesNumber=self.modulesNumber)
-        print(self.permutation)
+        self.permutation.shuffle()
+        print(self.permutation._perm)
 
 
-    def computeCost(self, perm=None):
-        newCost = 0
-        if perm is None:
-            perm = self.permutation
-        for i in range(self.modulesNumber):
-            for j in range(self.modulesNumber):
-                newCost += self.weights[i, j] * self.distances[perm[i], perm[j]]
-        return newCost
+    
 
     # TODO Neighbourhood of n distance ?
-    def getNeighbours(self):
-        neighbours = []
-        for i in range(self.modulesNumber):
-            for j in range(i, self.modulesNumber):
-                if i != j:
-                    temp = self.permutation[:]
-                    temp[i] = self.permutation[j]
-                    temp[j] = self.permutation[i]
-                    # print(temp)
-                    neighbours.append(temp)
-        return neighbours
+    
 
     def simulatedAnnealing(self, t0, mu, n1, n2):
         fitness = []
         xmin = self.permutation
         xnext = 0
         temp = t0
-        fmin = self.computeCost()
+        fmin = self.permutation.computeCost(self)
         fitness.append(fmin)
         for k in range(n1):
-            neighbours = self.getNeighbours()
+            neighbours = self.permutation.getNeighbours()
             # print(neighbours)
             for l in range(1, n2):
                 y = rd.choice(neighbours)
-                variationF = self.computeCost(y) - self.computeCost()
+                variationF = y.computeCost(self) - self.permutation.computeCost(self)
                 if variationF <= 0:
                     xnext = y
-                    fnext = self.computeCost(xnext)
+                    fnext = xnext.computeCost(self)
                     if fnext < fmin:
                         xmin = xnext
                         fmin = fnext
@@ -81,7 +64,7 @@ class Taixxa:
                     else:
                         xnext = self.permutation
                 self.permutation = xnext
-                fitness.append(self.computeCost())
+                fitness.append(self.permutation.computeCost(self))
             temp = temp * mu
         return xmin, fitness
 
@@ -89,21 +72,22 @@ class Taixxa:
     def tabuSearch(self, maxIter, lenList):
         fitness = []
         xmin = self.permutation
-        fmin = self.computeCost()
+        fmin = self.permutation.computeCost(self)
         T = []
         for i in range(maxIter):
-            C = [x for x in self.getNeighbours() if x not in T]
-            fC = list(map(lambda x: self.computeCost(x), C))
+            Txi = list(map(lambda x: self.permutation.permute(x[0],x[1]), T))
+            C = [x for x in self.permutation.getNeighbours() if x not in Txi]
+            fC = list(map(lambda x: x.computeCost(self), C))
             xnext = C[fC.index(min(fC))]
-            variationF = self.computeCost(xnext) - self.computeCost()
+            variationF = xnext.computeCost(self) - self.permutation.computeCost(self)
             if variationF >= 0:
-                T.append(xnext)
+                T.append(xnext.reversePerm(self.permutation))
                 if len(T) > lenList:
                     T.pop(0)
-            fnext = self.computeCost(xnext)
+            fnext = xnext.computeCost(self)
             if fnext < fmin:
                 xmin = xnext
                 fmin = fnext
             self.permutation = xnext
-            fitness.append(self.computeCost())
+            fitness.append(self.permutation.computeCost(self))
         return xmin, fitness
