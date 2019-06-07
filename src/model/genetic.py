@@ -1,10 +1,12 @@
 import copy
 import random
+import numpy as np
 
 import math
 
 from src.model.Permutation import Permutation
 from src.model.Taixxa import Taixxa
+from src.view.FitnessViewer import FitnessViewer
 
 
 class GeneticAlgorithm:
@@ -45,13 +47,13 @@ class GeneticAlgorithm:
 
         for i in range(nbIterations):
 
-            print(self._population[0][:])
-            print(len(self._population))
+            #print(self._population[0][:])
+            #print(len(self._population))
             scores = self.evaluatePopulation()
             couples = self.selectBestCouples(scores)
             self.crossover(couples)
             self.mutate()
-            print(self._bestPermutation.computeCost(self._map))
+            #print(self._bestPermutation.computeCost(self._map))
             print(self._bestFitness)
 
         return self._bestFitness, self._fitness, self._bestPermutation
@@ -71,8 +73,11 @@ class GeneticAlgorithm:
 
         for i in range(int(len(self._population) / 2.5)):
             indexMin = scores.index(min(scores))
-            if i is 0 and self._bestFitness > scores[indexMin]:
+
+            if i is 0:
                 self._fitness.append(scores[indexMin])
+            if i is 0 and self._bestFitness > scores[indexMin]:
+
                 self._bestFitness = scores[indexMin]
                 self._bestPermutation = copy.deepcopy(self._population[indexMin])
 
@@ -90,6 +95,7 @@ class GeneticAlgorithm:
         ret = list()
         for e in [sl[1] for sl in couplesIndex[:int(len(self._population) / 2)]]:
             ret.append((e[0][0], e[1][0]))
+
 
         return ret
 
@@ -117,30 +123,30 @@ class GeneticAlgorithm:
         childGenes = [None] * size
         permCrossed = list()
 
-        print(nbPermutations)
-        print(size)
+        #print(nbPermutations)
+        #print(size)
         indexes = random.sample(range(0, size - 1), nbPermutations)
         for i in indexes:
             childGenes[i] = second[i]
             permCrossed.append((childGenes[i], main[i]))
 
         for i in range(size):
-            print(permCrossed)
-            print(childGenes[:])
+            #print(permCrossed)
+            #print(childGenes[:])
             if childGenes[i] is None:
                 if main[i] in [e[0] for e in permCrossed]:
-                    print("OUI")
+                    #print("OUI")
                     for tup in permCrossed:
                         if main[i] == tup[0]:
                             childGenes[i] = tup[1]
                 else:
                     childGenes[i] = main[i]
 
-            print(childGenes[:])
+            #print(childGenes[:])
 
-        print(main[:])
-        print(second[:])
-        print(childGenes[:])
+        #print(main[:])
+        #print(second[:])
+        #print(childGenes[:])
         return Permutation(size, childGenes)
 
     def mutate(self):
@@ -155,8 +161,10 @@ class GeneticAlgorithm:
 data = Taixxa()
 data.loadFile("../../notebooks/tai12a.dat")
 algo = GeneticAlgorithm(data)
-algo.setParameters(population=100, selector=1, crossMultiple=True, crossProba=0.2, mutationProba=0)
-#algo.iterate(2000)
-scores = algo.evaluatePopulation()
-couples = algo.selectBestCouples(scores)
-algo.crossover(couples)
+algo.setParameters(population=100, selector=1, crossMultiple=False, crossProba=0.0, mutationProba=.1)
+result, fitness , _= algo.iterate(100)
+fit = FitnessViewer(np.array(fitness))
+fit.plot()
+#scores = algo.evaluatePopulation()
+#couples = algo.selectBestCouples(scores)
+#algo.crossover(couples)
