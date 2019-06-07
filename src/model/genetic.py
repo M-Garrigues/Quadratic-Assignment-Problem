@@ -54,6 +54,7 @@ class GeneticAlgorithm:
 
             if i is 0:
                 self._fitness.append(scores[indexMin])
+                self._best = copy.deepcopy(self._population[indexMin])
 
             scores[indexMin] = math.inf
 
@@ -114,11 +115,21 @@ class GeneticAlgorithm:
 
         return Permutation(size, childGenes)
 
+    def mutate(self):
+
+        for permutation in self._population:
+
+
+            if random.uniform(0, 1) < self._mutationProbability:
+                i, j = random.sample(range(0, len(permutation[:]) - 1), 2)
+                permutation.permute(i, j)
+
+
 
 data = Taixxa()
 data.loadFile("../../notebooks/tai12a.dat")
 algo = GeneticAlgorithm(data)
-algo.setParameters(population=10, selector=1)
+algo.setParameters(population=10, selector=1, mutationProba=0.2)
 best = algo.selectBestCouples(algo.evaluatePopulation())
 print(algo.evaluatePopulation())
 
@@ -130,5 +141,4 @@ for b in best:
 print("--azfazfazfazffzafazazfzafzafzaf--")
 
 algo.crossover(best)
-
-print(algo._population)
+algo.mutate()
