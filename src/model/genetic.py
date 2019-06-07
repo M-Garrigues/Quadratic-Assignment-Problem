@@ -30,7 +30,7 @@ class GeneticAlgorithm:
     def initialise(self):
 
         for i in range(len(self._population)):
-            self._population[i] = copy.deepcopy(self._map.permutation)
+            self._population[i] = copy.deepcopy(self._map._perm)
             self._population[i].shuffle()
 
         self._best = math.inf
@@ -105,15 +105,14 @@ class GeneticAlgorithm:
 
         for i in range(size):
 
-            if childGenes[i] is not None:
-                if not (main[i] in [e[1] for e in permCrossed]):
+            if childGenes[i] is None:
+                if not (main[i] in [e[0] for e in permCrossed]):
                     childGenes[i] = main[i]
                 else:
-                    childGenes[i] = permCrossed[0][0]
+                    childGenes[i] = permCrossed[0][1]
                     permCrossed.pop(0)
 
-        print(childGenes)
-        return Permutation(childGenes)
+        return Permutation(size, childGenes)
 
 
 data = Taixxa()
@@ -130,6 +129,6 @@ for b in best:
 
 print("--azfazfazfazffzafazazfzafzafzaf--")
 
-p = algo.crossover(best)
+algo.crossover(best)
 
-print(p[:])
+print(algo._population)
