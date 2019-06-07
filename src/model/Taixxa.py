@@ -1,7 +1,8 @@
 import numpy as np
 import random as rd
-
-from src.model.Permutation import Permutation
+import sys
+sys.path.insert(0, '../src/model/')
+from Permutation import Permutation
 
 
 class Taixxa:
@@ -26,7 +27,7 @@ class Taixxa:
             temp = list(map(lambda x: list(filter(lambda a: a != '', x)),
                             list(map(lambda x: x[:-1].split(" "), lines[self.modulesNumber + 2:]))))
             temp = list(map(lambda x: list(map(lambda a: int(a), x)), temp))
-            self.distances = np.array(temp)
+            self.distances = np.array(temp[:-1])
 
         self.permutation = Permutation(modulesNumber=self.modulesNumber)
         print(self.permutation)
