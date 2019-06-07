@@ -11,7 +11,7 @@ class TabuSearch:
         self._perm = Permutation(taixxa._modulesNumber)
         self._data = taixxa
         
-    def tabuSearch(self, maxIter, lenList):
+    def solve(self, maxIter, lenList):
         self._perm.shuffle()
         fitness = []
         xmin = self._perm

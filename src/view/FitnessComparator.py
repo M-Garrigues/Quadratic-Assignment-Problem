@@ -22,6 +22,3 @@ class FitnessComparator:
         print(self._values)
         self._length += 1
 
-
-fit = FitnessComparator(df=pd.DataFrame(np.random.randn(100, 4), index=pd.RangeIndex(stop=100), columns=list('ABCD')))
-fit.plot()

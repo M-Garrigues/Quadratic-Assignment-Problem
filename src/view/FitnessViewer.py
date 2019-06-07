@@ -9,8 +9,11 @@ class FitnessViewer:
         self._length = values.size
         self._values = pd.Series(values, index=pd.RangeIndex(stop=self._length))
 
-    def plot(self):
-        self._values.plot()
+    def plot(self,title):
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+        ax.set_title(title)
+        ax.plot(self._values)
         plt.show()
 
     def add(self, value):
@@ -19,7 +22,4 @@ class FitnessViewer:
         print(self._values)
         self._length += 1
 
-
-viewer = FitnessViewer(np.random.randn(10))
-viewer.plot()
 
