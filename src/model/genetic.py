@@ -137,16 +137,23 @@ class GeneticAlgorithm:
                 if main[i] in [e[0] for e in permCrossed]:
                     #print("OUI")
                     for tup in permCrossed:
-                        if main[i] == tup[0]:
+                        if main[i] == tup[0] and tup[1] not in childGenes:
+                            #print(tup[1])
                             childGenes[i] = tup[1]
                 else:
                     childGenes[i] = main[i]
 
-            #print(childGenes[:])
+        left = self.find_missing(childGenes, len(childGenes))
+        for gene in childGenes:
+            if gene is None:
+                childGenes[childGenes.index(gene)] = left[0]
+                left.pop(0)
+
 
         #print(main[:])
         #print(second[:])
         #print(childGenes[:])
+        #print("---------")
         return Permutation(size, childGenes)
 
     def mutate(self):
@@ -157,14 +164,17 @@ class GeneticAlgorithm:
                 i, j = random.sample(range(0, len(permutation[:]) - 1), 2)
                 permutation.permute(i, j)
 
+    def find_missing(self, lst, size):
+        return [x for x in range(size)
+                if x not in lst]
 
 data = Taixxa()
-data.loadFile("../../notebooks/tai12a.dat")
+data.loadFile("../../notebooks/tai100a.dat")
 algo = GeneticAlgorithm(data)
-algo.setParameters(population=100, selector=1, crossMultiple=False, crossProba=0.0, mutationProba=.1)
-result, fitness , _= algo.iterate(100)
+algo.setParameters(population=100, selector=1, crossMultiple=True, crossProba=0.6, mutationProba=.7)
+result, fitness , _= algo.iterate(800)
 fit = FitnessViewer(np.array(fitness))
-fit.plot()
+fit.plot("test")
 #scores = algo.evaluatePopulation()
 #couples = algo.selectBestCouples(scores)
 #algo.crossover(couples)
