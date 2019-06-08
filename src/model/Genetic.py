@@ -4,9 +4,9 @@ import numpy as np
 
 import math
 
-from src.model.Permutation import Permutation
-from src.model.Taixxa import Taixxa
-from src.view.FitnessViewer import FitnessViewer
+from Permutation import Permutation
+from Taixxa import Taixxa
+from FitnessViewer import FitnessViewer
 
 
 class GeneticAlgorithm:
@@ -54,7 +54,7 @@ class GeneticAlgorithm:
             self.crossover(couples)
             self.mutate()
             #print(self._bestPermutation.computeCost(self._map))
-            print(self._bestFitness)
+            #(self._bestFitness)
 
         return self._bestFitness, self._fitness, self._bestPermutation
 
@@ -123,22 +123,16 @@ class GeneticAlgorithm:
         childGenes = [None] * size
         permCrossed = list()
 
-        #print(nbPermutations)
-        #print(size)
         indexes = random.sample(range(0, size - 1), nbPermutations)
         for i in indexes:
             childGenes[i] = second[i]
             permCrossed.append((childGenes[i], main[i]))
 
         for i in range(size):
-            #print(permCrossed)
-            #print(childGenes[:])
             if childGenes[i] is None:
                 if main[i] in [e[0] for e in permCrossed]:
-                    #print("OUI")
                     for tup in permCrossed:
                         if main[i] == tup[0] and tup[1] not in childGenes:
-                            #print(tup[1])
                             childGenes[i] = tup[1]
                 else:
                     childGenes[i] = main[i]
@@ -148,12 +142,6 @@ class GeneticAlgorithm:
             if gene is None:
                 childGenes[childGenes.index(gene)] = left[0]
                 left.pop(0)
-
-
-        #print(main[:])
-        #print(second[:])
-        #print(childGenes[:])
-        #print("---------")
         return Permutation(size, childGenes)
 
     def mutate(self):
@@ -168,13 +156,3 @@ class GeneticAlgorithm:
         return [x for x in range(size)
                 if x not in lst]
 
-data = Taixxa()
-data.loadFile("../../notebooks/tai100a.dat")
-algo = GeneticAlgorithm(data)
-algo.setParameters(population=100, selector=1, crossMultiple=True, crossProba=0.6, mutationProba=.7)
-result, fitness , _= algo.iterate(800)
-fit = FitnessViewer(np.array(fitness))
-fit.plot("test")
-#scores = algo.evaluatePopulation()
-#couples = algo.selectBestCouples(scores)
-#algo.crossover(couples)
