@@ -1,0 +1,13 @@
+Le rapport se trouve dans le dossier notebooks.
+
+Ce notebook doit être exécuté dans un environnement Python 3, avec les librairies suivantes:
+	- Numpy
+	- Matplotlib
+	- Pandas
+	- Pickle
+
+Pour exécuter une cellule, il faudra au préalable exécuter les 4 premières cellules contenant du code.
+
+Les classes utilisées dans ce notebook sont disponibles dans le dossier src.
+
+Pour toute question n'hésitez pas à nous contacter.

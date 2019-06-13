@@ -1,6 +1,6 @@
 import numpy as np
-import random as rd
 import sys
+import random as rd
 from Permutation import Permutation
 import pickle
 
@@ -35,7 +35,7 @@ class Taixxa:
         self.loadHashMap()
         self._perm = Permutation(modulesNumber=self._modulesNumber)
         self._perm.shuffle()
-        print(self._perm._perm)
+
 
     def addHash(self,hashed,cost):
         self._hashMap[hashed] = cost
